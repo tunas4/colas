@@ -1,14 +1,16 @@
 import tkinter as tk
 
 class ColaDobleCircular:
-    def __init__(self, max_tamano=5):
-        self.max = max_tamano
-        self.cola = [None] * max_tamano
+    max_tamano = 5
+    def __init__(self, max_tamano=None):
+        self.max = max_tamano if max_tamano else ColaDobleCircular.max_tamano
+        self.cola = [None] * self.max
         self.inicio = -1
         self.fin = -1
 
     def inicializar(self):
         self.inicio = self.fin = -1
+        self.cola = [None] * self.max
 
     def insertar_cola_doble_circular(self, v, l):
         if (self.inicio == 0 and self.fin == self.max - 1) or (self.fin == self.inicio - 1):
@@ -111,25 +113,43 @@ def insertar():
     root.geometry("250x250")
     root.resizable(False, False)
 
+    def acualizar_interfaz():
+        if (c.inicio == 0 and c.fin == c.max - 1) or (c.fin == c.inicio - 1):
+            label.config(text="Cola llena")
+            button_inicio.config(state="disabled")
+            button_final.config(state="disabled")
+        else:   
+            label.config(text="")
+            button_inicio.config(state="normal")
+            button_final.config(state="normal")
+
     def ins_in():
         v = entry.get()
-        
-        if not v.isdigit():
+        try:
+            v = int(v)
+        except ValueError:
             resultado_label.config(text="Ingrese un número válido")
             return
 
         res = c.insertar_cola_doble_circular(int(v), 1)
         resultado_label.config(text=res)
+        entry.delete(0, tk.END)
+        entry.focus()
+        acualizar_interfaz()
 
     def ins_fin():
         v = entry.get()
-        
-        if not v.isdigit():
+        try:
+            v = int(v)
+        except ValueError:
             resultado_label.config(text="Ingrese un número válido")
             return
 
         res = c.insertar_cola_doble_circular(int(v), 0)
         resultado_label.config(text=res)
+        entry.delete(0, tk.END)
+        entry.focus()
+        acualizar_interfaz()
 
     label = tk.Label(root, text="Ingrese el valor a insertar:")
     label.pack(padx=10, pady=10, anchor="center")
@@ -146,21 +166,41 @@ def insertar():
     resultado_label = tk.Label(root, text="")
     resultado_label.pack(padx=10, pady=10, anchor="center")
 
+    acualizar_interfaz()
+
     root.mainloop()
 
 def eliminar():
     root = tk.Tk()
     root.title("Eliminar")
-    root.geometry("200x100")
+    root.geometry("200x200")
     root.resizable(False, False)
+
+    label = tk.Label(root, text="")
+    label.pack(padx=10, pady=10, anchor="center")
+
+    def acualizar_interfaz():
+        if c.inicio == -1:
+            label.config(text="Cola vacía")
+            button_inicio.config(state="disabled")
+            button_final.config(state="disabled")
+        else:   
+            label.config(text="")
+
+    if c.inicio == -1:
+        label = tk.Label(root, text="Cola vacía")
+        label.pack(padx=10, pady=10, anchor="center")
+        return
 
     def eliminar_in():
         res = c.eliminar_cola_doble_circular(1)
-        label.config(text=res)
+        label.config(text=f"Elemento eliminado: {res}")
+        acualizar_interfaz()
     
     def eliminar_fin():
         res = c.eliminar_cola_doble_circular(0)
         label.config(text=res)
+        acualizar_interfaz()
 
     button_inicio = tk.Button(root, text="Eliminar del inicio", command=eliminar_in)
     button_inicio.pack(padx=10, pady=10, anchor="center")
@@ -176,11 +216,16 @@ def eliminar():
 def creditos():
     root = tk.Tk()
     root.title("Créditos")
-    root.geometry("200x100")
+    root.geometry("250x200")
     root.resizable(False, False)
-
-    label = tk.Label(root, text="Desarrollado por [Tu Nombre]")
+    labelMateria = tk.Label(root, text="Estructura de datos Aplicadas")
+    labelMateria.pack(padx=10, pady=10, anchor="center")
+    label = tk.Label(root, text="Desarrollado por:")
+    labelNoe = tk.Label(root, text="Noé Abel Vargas López | 23170106")
+    labelJona = tk.Label(root, text="Jonathan Ivan Castro Saenz | 23170035")
     label.pack(padx=10, pady=10, anchor="center")
+    labelNoe.pack(padx=10, pady=10, anchor="center")
+    labelJona.pack(padx=10, pady=10, anchor="center")
 
     root.mainloop()
 
