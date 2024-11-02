@@ -21,7 +21,7 @@ button.pack(padx=10, pady=10)
 button = tk.Button(root, text="Creditos", command=c.creditos)
 button.pack(padx=10, pady=10)
 
-button = tk.Button(root, text="Salir", command=root.quit)
+button = tk.Button(root, text="Salir", command=root.destroy)
 button.pack(padx=10, pady=10)
 
 root.mainloop()
